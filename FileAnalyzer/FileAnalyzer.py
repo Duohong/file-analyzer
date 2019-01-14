@@ -1,6 +1,6 @@
 from tkinter import Tk, Menu, Text, BOTH, W, N, E, S, BooleanVar, Checkbutton, END
 from tkinter import filedialog
-#from tkinter import scrolledtext
+from tkinter import scrolledtext
 from tkinter.ttk import Frame, Button, Label, Style
 
 
@@ -28,9 +28,8 @@ class FileAnalyzer(Frame):
         area.grid(row=0, column=0, columnspan=2, rowspan=1, 
             padx=5, sticky=E+W+S+N)
 
-        self.area2 = Text(self)
-        self.area2.grid(row=0, column=2, columnspan=1, rowspan=2, 
-            padx=5, sticky=E+W+S+N)
+        self.textPad = scrolledtext.ScrolledText(self, width=50, height=40)
+        self.textPad.grid(row=0, column=2, columnspan=1, rowspan=2, padx=5, sticky=E+W+S+N)
         
         chk_state = BooleanVar()
         chk_state.set(True)
@@ -38,14 +37,19 @@ class FileAnalyzer(Frame):
         chk.grid(column=0, row=1)
 
         obtn = Button(self, text="Refresh", command=self.clicked)
-        obtn.grid(row=1, column=1)        
+        obtn.grid(row=1, column=1)  
+
+        self.openFile()      
     
     def clicked(self):
-        res = "Refresh ScrolledText."
-        self.area2.insert(END, res)
+        res = "Refresh ScrolledText.\n"
+        self.textPad.insert(END, res)
 
     def openFile(self):
-        file = filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+        filePath = filedialog.askopenfilename(filetypes=(('text files', 'txt'),))
+        file = open(filePath, "r") #filePath
+        self.textPad.insert(END, file.read())
+
 
 def main():
     root = Tk()
